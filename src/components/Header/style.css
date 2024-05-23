@@ -1,0 +1,29 @@
+.navbar {
+    position: sticky;
+    top:0 ;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--theme);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+  }
+  .logo{
+    color: white ;
+   font-weight: 600;
+  }
+  .link{
+    opacity: 0.6;
+  }
+  .link:hover{
+   cursor: pointer;
+   opacity: 1;
+  }
+  @media only screen and (max-width: 580px) {
+    .navbar {
+      position: sticky;
+      top:0 ;
+     
+      width :95vw !important
+    }
+  }

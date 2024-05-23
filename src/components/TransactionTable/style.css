@@ -1,0 +1,44 @@
+.table-input{
+    width:800px;
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+.table-title{
+    text-align: center;
+}
+.radio-select-btn{
+    display: flex;
+    justify-content: space-around;
+}
+.export-btn{
+    width : 150px
+}
+@media only screen and (max-width: 580px) {
+    .radio-select-btn{
+        display: flex;
+      
+    }
+    .export-btn{
+        width : 30px !important;
+        height: 40px!important;
+    }
+    .table-input{
+        width:90vw !important;
+        margin: auto;
+        margin-bottom: 10px;
+        padding: 0.5rem 0;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+    .input-radio{
+        display: flex;
+    }
+    .export-import-btn{
+        display: none !important;
+    }
+}

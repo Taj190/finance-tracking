@@ -1,0 +1,22 @@
+.sign-up-wrapper{
+    width:60%;
+    max-width: 500px;
+    height: auto;
+    box-shadow: 5px 5px 5px rosybrown;
+    border-radius: 30px;
+    padding: 1rem 1.5rem;
+    background-color: rgb(240, 237, 234);
+}
+.title{
+    font-weight: 500;
+    font-size: 18px;
+    text-align: center;
+}
+.login{
+   
+    cursor: pointer;
+
+}
+.loginpage{
+    text-align: center;
+}
