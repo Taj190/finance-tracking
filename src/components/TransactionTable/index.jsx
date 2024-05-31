@@ -77,10 +77,13 @@ function TransactionTable({transactions , addTransaction , fetchTransactions,del
   };
 
   const handleDelete = async (id) => {
-    await deleteTransaction(id);
-    console.log(`Transaction with id ${id} deleted`);
-    toast.success('Transaction deleted');
-    
+    try {
+      await deleteTransaction(id);
+      console.log(`Transaction with id ${id} deleted`);
+      toast.success('Transaction deleted');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleOk = async () => {
