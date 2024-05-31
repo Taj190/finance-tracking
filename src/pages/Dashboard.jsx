@@ -4,7 +4,7 @@ import Cards from '../components/cards';
 import { Modal } from 'antd';
 import AddIncomeModal from '../components/Modals/Addincome';
 import AddExpenseModal from '../components/Modals/Addexpenses';
-import { addDoc, collection, getDocs, query } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'react-toastify';
@@ -71,27 +71,27 @@ function Dashboard() {
     }
   }
 
+  
+  const fetchTransactions = async () => {
+    setLoading(true);
+    try {
+      const q = query(collection(db, `users/${user.uid}/transactions`));
+      const querySnapshot = await getDocs(q);
+      const transactionsArray = [];
+      querySnapshot.forEach((doc) => {
+        transactionsArray.push({ id: doc.id, ...doc.data() });
+      });
+      setTransactions(transactionsArray);
+      console.log(transactionsArray);
+      toast.success("Transactions Fetched!");
+    } catch (error) {
+      console.error("Error fetching transactions: ", error);
+      toast.error("Couldn't fetch transactions");
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchTransactions = async () => {
-      setLoading(true);
-      try {
-        const q = query(collection(db, `users/${user.uid}/transactions`));
-        const querySnapshot = await getDocs(q);
-        const transactionsArray = [];
-        querySnapshot.forEach((doc) => {
-          transactionsArray.push(doc.data());
-        });
-        setTransactions(transactionsArray);
-        console.log(transactionsArray);
-        toast.success("Transactions Fetched!");
-      } catch (error) {
-        console.error("Error fetching transactions: ", error);
-        toast.error("Couldn't fetch transactions");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (user) {
       fetchTransactions();
     }
@@ -117,9 +117,46 @@ function Dashboard() {
     setExpenses(expensesTotal);
     setCurrentBalance(incomeTotal - expensesTotal);
   }
+  
+  async function deleteAllTransaction() {
+  try {
+    const querySnapshot = await getDocs(collection(db, `users/${user.uid}/transactions`));
+      querySnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+      toast.success("All transactions deleted!");
+      setTransactions([]);
+      calculateBalance();
+    } catch (error) {
+      console.error("Error deleting transactions: ", error);
+      toast.error("Couldn't delete transactions");
+    }
+  }
   let sortedTransactions = transactions.sort((a, b) => {
         return new Date(a.date) - new Date(b.date);
 })
+async function deleteTransaction(transactionId) {
+  try {
+    const querySnapshot = await getDocs(collection(db, `users/${user.uid}/transactions`));
+    
+    for (const doc of querySnapshot.docs) {
+      if (doc.id === transactionId) {
+        await deleteDoc(doc.ref);
+        break; // Exit the loop once the transaction is deleted
+      }
+    }
+    
+    // Fetch the updated list of transactions
+    const updatedQuerySnapshot = await getDocs(collection(db, `users/${user.uid}/transactions`));
+    setTransactions(updatedQuerySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    calculateBalance();
+    
+  } catch (error) {
+    console.error("Error deleting transaction: ", error);
+    toast.error("Couldn't delete transaction");
+  }
+}
+
   return (
     <div>
       <Header />
@@ -127,8 +164,13 @@ function Dashboard() {
         <p>loading..</p>
       ) : (
         <>
-          <Cards showExpenseModal={showExpenseModal} showIncomeModal={showIncomeModal}
-          income={income} expenses= {expenses} totalBalance={totalBalance} />
+          <Cards 
+          showExpenseModal={showExpenseModal}
+           showIncomeModal={showIncomeModal}
+          income={income} 
+          expenses= {expenses}
+           totalBalance={totalBalance} 
+           deleteAllTransaction={ deleteAllTransaction} />
           
           {transactions.length > 0  ? <ChartComponent sortedTransactions={sortedTransactions}/> :<NoTransactions/>}
 
@@ -142,7 +184,11 @@ function Dashboard() {
             handleIncomeCancel={handleIncomeCancel}
             onFinish={onFinish}
           />
-          <TransactionTable transactions={transactions} addTransaction={addTransaction}
+          <TransactionTable
+           transactions={transactions} 
+          addTransaction={addTransaction}
+          deleteAllTransaction={ deleteAllTransaction}
+          deleteTransaction={deleteTransaction}
           />
         </>
       )}

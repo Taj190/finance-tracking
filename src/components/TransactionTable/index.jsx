@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import './style.css'
-import { Input, Radio, Select, Table } from 'antd';
+import { Input, Radio, Select, Table, Popconfirm, Modal, Form, InputNumber } from 'antd';
 import { parse, unparse} from "papaparse";
 import { toast } from 'react-toastify';
 
-function TransactionTable({transactions , addTransaction , fetchTransactions}) {
+function TransactionTable({transactions , addTransaction , fetchTransactions,deleteTransaction}) {
     const {Option} = Select
     const [search, setSearch] = useState('')
     const [typeFilter, setTypeFilter] = useState('')
     const[sortKey, setSortKey] = useState('')
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [editedTransaction, setEditedTransaction] = useState(null);
+    const [form] = Form.useForm();
     const columns = [
         {
           title: 'Name',
@@ -36,6 +39,21 @@ function TransactionTable({transactions , addTransaction , fetchTransactions}) {
             dataIndex: 'type',
             key: 'type',
           },
+          {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => (
+              <span>
+                <a onClick={() => handleEdit(record)}>Edit</a>
+                <Popconfirm
+                  title="Are you sure delete this transaction?"
+                  onConfirm={() => handleDelete(record.id)}
+                >
+                  <a style={{ marginLeft: 8 }}>Delete</a>
+                </Popconfirm>
+              </span>
+            ),
+          },
       ];
       
       
@@ -45,13 +63,43 @@ function TransactionTable({transactions , addTransaction , fetchTransactions}) {
     );
     let sortedTransactions = filteredTransactions.sort((a, b) => {
         if (sortKey === 'date') {
-            return new Date(a.date) - new Date(b.date); // assuming date is a string
+            return new Date(a.date) - new Date(b.date); 
         } else if (sortKey === 'amount') {
             return a.amount - b.amount;
         } else {
             return 0;
         }
     });
+    
+  const handleEdit = (transaction) => {
+    setEditedTransaction(transaction);
+    setIsModalVisible(true);
+  };
+
+  const handleDelete = async (id) => {
+    await deleteTransaction(id);
+    console.log(`Transaction with id ${id} deleted`);
+    toast.success('Transaction deleted');
+    
+  };
+
+  const handleOk = async () => {
+    try {
+      const values = await form.validateFields();
+      const updatedTransaction = {
+       ...editedTransaction,
+       ...values,
+        amount: parseFloat(values.amount),
+      };
+      await addTransaction(updatedTransaction, true);
+      toast.success('Transaction updated');
+      setIsModalVisible(false);
+      setEditedTransaction(null);
+      form.resetFields();
+    } catch (error) {
+      console.error(error);
+    }
+  };
      function exportCSV(){
         var csv = unparse ({
             fields: ["name", "type" , "tag" ,"amount" , "date"],
@@ -145,6 +193,33 @@ function TransactionTable({transactions , addTransaction , fetchTransactions}) {
           </div>
     </div>
     <Table dataSource={sortedTransactions} columns={columns} />
+    <Modal
+        title="Edit Transaction"
+        oprn={isModalVisible}
+        onOk={handleOk}
+        onCancel={() => setIsModalVisible(false)}
+      >
+        <Form form={form} initialValues={editedTransaction}>
+          <Form.Item label="Name" name="name">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Amount" name="amount">
+            <InputNumber />
+          </Form.Item>
+          <Form.Item label="Tag" name="tag">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Date" name="date">
+            <Input type="date" />
+          </Form.Item>
+          <Form.Item label="Type" name="type">
+            <Select>
+              <Option value="income">Income</Option>
+              <Option value="expense">Expense</Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
    
     </>
   )

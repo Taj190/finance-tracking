@@ -1,0 +1,47 @@
+{
+  "en": {
+    "translation": {
+      "greeting": "Hello, world",
+      "signUp": "Sign Up",
+      "login": "Log In",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "loginWithGoogle": "Login with Google",
+      "createAccount": "Create an Account",
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign In"
+    }
+  },
+  "fr": {
+    "translation": {
+      "greeting": "Bonjour le monde",
+      "signUp": "S'inscrire",
+      "login": "Se connecter",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "loginWithGoogle": "Se connecter avec Google",
+      "createAccount": "Créer un compte",
+      "alreadyHaveAccount": "Vous avez déjà un compte?",
+      "signIn": "Se connecter"
+    }
+  },
+  "pb": {
+    "translation": {
+      "greeting": "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ",
+      "signUp": "ਸਾਇਨ ਅਪ",
+      "login": "ਲਾਗ ਇਨ",
+      "fullName": "ਪੂਰਾ ਨਾਮ",
+      "email": "ਈਮੇਲ",
+      "password": "ਪਾਸਵਰਡ",
+      "confirmPassword": "ਪਾਸਵਰਡ ਦੀ ਪੁ਷ਟੀ ਕਰੋ",
+      "loginWithGoogle": "Google ਨਾਲ ਲਾਗ ਇਨ",
+      "createAccount": "ਖਾਤਾ ਬਣਾਓ",
+      "alreadyHaveAccount": "ਪਹਿਲਾਂ ਹੀ ਕੋਲ ਇੱਕ ਖਾਤਾ ਹੈ?",
+      "signIn": "ਲਾਗ ਇਨ"
+    }
+  }
+}

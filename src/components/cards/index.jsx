@@ -1,15 +1,36 @@
-import React from 'react'
-import { Button, Card, Row } from 'antd';
+import React, { useState } from 'react'
+import { Button, Card, Modal, Row } from 'antd';
 import './style.css'
-function Cards({showExpenseModal,showIncomeModal , income , expenses, totalBalance}) {
+function Cards({showExpenseModal,showIncomeModal , income , expenses, totalBalance ,  deleteAllTransaction}) {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showDeleteConfirm=()=>{
+    setIsModalVisible(true);
+  }
+  const handleOk =() =>{
+    deleteAllTransaction()
+    setIsModalVisible(false);
+  }
+  const handleCancel =() =>{
+    setIsModalVisible(false);
+  }
   return (
     <div >
         <Row className='my-row'>
                 <Card className='my-card' title="Current Balance"hoverable>
                 <h2>Cuurent Balance</h2>
               <p>$ {totalBalance}</p>    
-                <Button >Reset Balance</Button>
+                <Button onClick={ showDeleteConfirm} >Reset Balance</Button>
                 </Card>
+
+      <Modal
+        title="Delete Transaction"
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>Are you sure you want to reset the balance?</p>
+      </Modal>
 
                 <Card className='my-card' title="Toatal Income"hoverable>
                 <h2>Total Income</h2>

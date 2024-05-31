@@ -7,6 +7,7 @@ import { auth, db, doc, provider, setDoc } from '../../firebase';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getDoc } from 'firebase/firestore';
+import { useTranslation } from 'react-i18next';
 function SignUp() {
  const [name, setName]=useState('')
  const [email, setEmail]=useState('')
@@ -15,7 +16,7 @@ function SignUp() {
  const [loader, setLoader]=useState(false)
  const [loginForm, setLoginForm]=useState(false)
  const navigate = useNavigate()
-
+ const { t } = useTranslation();
  function refreshUser() {
   setName('')
   setEmail('')
@@ -129,13 +130,13 @@ function SignUp() {
       <div className='sign-up-wrapper'>
       <h2 className='title'>Sign up on <span style={{color:"var(--theme)"}}>WalletWise</span></h2>
 
-      <Input label={'Email'} 
+      <Input label={t('email')} 
       type='email'
       state={email}
        setState={setEmail}
         placeholder={'taj@gmail.com'}/>
 
-<Input label={'Password'}
+<Input label={t('password')} 
       type='password'  
       state={password}
        setState={setPassword}
@@ -152,25 +153,25 @@ function SignUp() {
     (
       <div className='sign-up-wrapper'>
       <h2 className='title'>Sign up on <span style={{color:"var(--theme)"}}>WalletWise</span></h2>
-      <Input label={'Full Name'} 
+      <Input label={t('fullName')} 
       state={name}
        setState={setName}
         placeholder={'User Name'}
         />
 
-<Input label={'Email'} 
+<Input label={t('email')}
       type='email'
       state={email}
        setState={setEmail}
         placeholder={'taj@gmail.com'}/>
 
-<Input label={'Password'}
+<Input label={t('password')}
       type='password'  
       state={password}
        setState={setPassword}
         placeholder={'Enter Password'}/>
 
-<Input label={'Confrim Password'}  
+<Input label={t('confirmPassword')}   
       type='password' 
       state={confirmPassword}
        setState={setConfirmPassword}
