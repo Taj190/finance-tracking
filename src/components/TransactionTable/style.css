@@ -17,6 +17,16 @@
 .export-btn{
     width : 150px
 }
+.edit-delete{
+    background-color: rgb(56, 94, 177);
+    padding: 12px;
+    font-size: 17px;
+    margin: 7px;
+    border-radius: 10px;
+     color: #fff;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px  rgb(108, 56, 177);
+}
 @media only screen and (max-width: 580px) {
     .radio-select-btn{
         display: flex;
@@ -38,7 +48,8 @@
     .input-radio{
         display: flex;
     }
-    .export-import-btn{
+    .export-btn{
         display: none !important;
     }
 }
+

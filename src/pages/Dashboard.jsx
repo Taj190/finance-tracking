@@ -4,7 +4,7 @@ import Cards from '../components/cards';
 import { Modal } from 'antd';
 import AddIncomeModal from '../components/Modals/Addincome';
 import AddExpenseModal from '../components/Modals/Addexpenses';
-import { addDoc, collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'react-toastify';
@@ -82,8 +82,7 @@ function Dashboard() {
         transactionsArray.push({ id: doc.id, ...doc.data() });
       });
       setTransactions(transactionsArray);
-      console.log(transactionsArray);
-      toast.success("Transactions Fetched!");
+      
     } catch (error) {
       console.error("Error fetching transactions: ", error);
       toast.error("Couldn't fetch transactions");
@@ -157,6 +156,20 @@ async function deleteTransaction(transactionId) {
   }
 }
 
+async function updateTransaction(transactionId, updatedTransaction) {
+  try {
+    const transactionRef = doc(db, `users/${user.uid}/transactions`, transactionId);
+    await updateDoc(transactionRef, updatedTransaction);
+
+    await fetchTransactions();
+    calculateBalance();
+    toast.success("Transaction updated!");
+  } catch (error) {
+    console.error("Error updating transaction: ", error);
+    toast.error("Couldn't update transaction");
+  }
+}
+
   return (
     <div>
       <Header />
@@ -189,6 +202,8 @@ async function deleteTransaction(transactionId) {
           addTransaction={addTransaction}
           deleteAllTransaction={ deleteAllTransaction}
           deleteTransaction={deleteTransaction}
+          updateTransaction={updateTransaction}
+          fetchTransactions={fetchTransactions}
           />
         </>
       )}

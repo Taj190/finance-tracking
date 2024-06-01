@@ -20,3 +20,17 @@
 .loginpage{
     text-align: center;
 }
+@media only screen and (max-width: 580px) {
+    .sign-up-wrapper{
+        display:  flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 400px;
+        height: auto;
+        box-shadow: 5px 5px 5px rosybrown;
+        border-radius: 30px;
+        padding: 1rem 1.5rem;
+        background-color: rgb(240, 237, 234);
+    }
+}
